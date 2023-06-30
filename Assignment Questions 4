@@ -1,0 +1,297 @@
+# Module-1_DSA
+PPT assignment with java
+
+
+// Question - 01
+public class Main {
+    public static void main(String[] args) {
+        int[] arr1 = {1, 2, 3, 4, 5};
+        int[] arr2 = {1, 2, 5, 7, 9};
+        int[] arr3 = {1, 3, 4, 5, 8};
+        comman_element(arr1, arr2, arr3);
+    }
+
+    static void comman_element(int[] arr1, int[] arr2, int[] arr3) {
+        int ptr1 = 0,ptr2 =0 ,ptr3 = 0;
+        while(ptr1 < arr1.length) {
+            if(arr1[ptr1] == arr2[ptr2] && arr1[ptr1] == arr3[ptr3]) {
+                System.out.print(arr1[ptr1] + " ");
+                if(ptr1 == arr1.length-1 || ptr2 == arr2.length-1 || ptr3 == arr3.length-1) {
+                    break;
+                } else {
+                ptr1++;
+                ptr2++;
+                ptr3++;
+                }
+            }
+            if(arr1[ptr1] < arr2[ptr2] || arr1[ptr1] < arr3[ptr3]){
+                if(ptr1 == arr1.length-1) {
+                    break;
+                } else ptr1++;
+            }
+            if(arr1[ptr1] > arr2[ptr2]) {
+                if(ptr2 == arr2.length-1) {
+                    break;
+                } else ptr2++;
+            }
+            if(arr1[ptr1] > arr3[ptr3]) {
+                if(ptr3 == arr3.length-1) {
+                    break;
+                } else ptr3++;
+            }
+        }
+    }
+}
+
+
+
+// Question - 02
+public class Main {
+    public static void main(String[] args) {
+        int[] nums1 = {1, 2, 3};
+        int[] nums2 = {2, 4, 6};
+        int[][] arr = uncommon_element(nums1, nums2, nums1, nums2);
+        for(int[] num : arr) {
+           for(int ele : num) {
+            System.out.print(ele + " ");
+           }
+           System.out.println();
+        }
+    }
+
+    static int[][] uncommon_element(int[] nums1, int[] nums2, int[] copy_of_nums1,
+    int[] copy_of_nums2){
+        int ptr1 = 0, ptr2 = 0, count = 0;
+        while(ptr1 < nums1.length) {
+            if(nums1[ptr1] == nums2[ptr2]) {
+                count++;
+                copy_of_nums1[ptr1] = Integer.MAX_VALUE;
+                copy_of_nums2[ptr2] = Integer.MAX_VALUE;
+                if(ptr1 == nums1.length-1 || ptr2 == nums2.length-1) break;
+                else {
+                    ptr1++;
+                    ptr2++;
+                }
+            }
+            if(nums1[ptr1] < nums2[ptr2]) {
+                if(ptr1 == nums1.length-1) {
+                    break;
+                } else ptr1++;
+            }
+            if(nums1[ptr1] > nums2[ptr2]) {
+                if(ptr2 == nums2.length-1) {
+                    break;
+                } else ptr2++;
+            }
+        }
+
+        int[] arr1 = new int[nums1.length-count];
+        int[] arr2 = new int[nums2.length-count];
+        int index1 = 0;
+        for(int i = 0; i < copy_of_nums1.length; i++) {
+            if(copy_of_nums1[i] != Integer.MAX_VALUE) {
+                arr1[index1] = copy_of_nums1[i];
+                index1++;
+            } else continue;
+        }
+        index1 = 0;
+        for(int i = 0; i < copy_of_nums2.length; i++) {
+            if(copy_of_nums2[i] != Integer.MAX_VALUE) {
+                arr2[index1] = copy_of_nums2[i];
+                index1++;
+            } else continue;
+        }
+        return new int[][] {arr1, arr2};
+    } 
+}
+
+
+// Question - 03
+public class Main{
+    public static void main(String[] args) {
+        Main obj = new Main();
+        int[][] matrix = {{1,2,3},{4,5,6},{7,8,9}};
+        System.out.println("Before....");
+        obj.print_2d_array(matrix);
+        matrix = obj.transpose_matrix(matrix);
+        System.out.println("After.......");
+        obj.print_2d_array(matrix);
+    }
+
+    int[][] transpose_matrix(int[][] matrix) {
+        int len = matrix.length;
+        for(int i = 0; i < len; i++) {
+            for(int j = 0; j < matrix[0].length; j++) {
+                if(i != j && i < j) {
+                    int temp = matrix[i][j];
+                    matrix[i][j] = matrix[j][i];
+                    matrix[j][i]= temp;
+                }
+            }
+        }
+        return matrix;
+    }
+
+    void print_2d_array(int[][] matrix) {
+        int len = matrix.length;
+        for(int i = 0; i < len; i++) {
+            for(int j = 0; j < matrix[0].length; j++) {
+                System.out.print(matrix[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+}
+
+
+
+// Question - 04
+public class Main {
+    public static void main(String[] args) {
+        int[] nums = {1, 4, 2, 3, 5, 6, 8, 7};
+        Main obj = new Main();
+        int max = obj.maximized_sum(nums);
+        System.out.println(max);
+
+    } 
+
+    int maximized_sum(int[] nums) {
+        for(int i = 0; i < nums.length; i++) {
+            for(int j = i; j < nums.length; j++) {
+                if(nums[i] > nums[j]) {
+                    int temp = nums[i];
+                    nums[i] = nums[j];
+                    nums[j] = temp;
+                }
+            }
+        }
+        int sum = 0;
+        for(int i = 0; i < nums.length; i += 2) {
+            sum += nums[i];
+        }
+        return sum;
+    }
+}
+
+
+
+// Question - 05
+public class Main{
+    public static void main(String[] args) {
+        int n = 15;
+        System.out.println(complete_rows(n));
+    }
+
+    public static int complete_rows(int n) {
+        int count = 0;
+        for(int i = 1; n >= i; i++) {
+            count++;
+            n -= i;
+        }
+        return count;
+    }
+}
+
+
+
+
+// Question - 06
+public class Main{
+    public static void main(String[] args) {
+        int[] nums = {-4,-1,0,3,10};
+        nums = squares_of_number(nums);
+        for (int i : nums) {
+            System.out.print(i + " ");
+        }
+    } 
+
+    public static int[] squares_of_number(int[] nums) {
+        for(int i = 0; i < nums.length; i++) {
+            nums[i] *= nums[i];
+        }
+        for(int i = 0; i < nums.length; i++) {
+            for(int j = i; j < nums.length; j++) {
+                if(nums[i] > nums[j]) {
+                    int temp = nums[i];
+                    nums[i] = nums[j];
+                    nums[j] = temp;
+                }
+            }
+        }
+        return nums;
+    }
+}
+
+
+
+// Question - 07
+public class Main{
+    public static void main(String[] args) {
+        int m = 3;
+        int n = 3;
+        int[][] ops = {{2, 2}, {3, 3}};
+        System.out.println("Maximum Count : " + maximum_integer(m, n, ops));
+
+    } 
+
+    public static int maximum_integer(int m, int n, int[][] ops) {
+        int[][] M = new int[m][n];
+        System.out.println("Before operation....");
+        print_2d_array(M);
+        int count = 0;
+        for(int i = 0; i < ops.length; i++) {
+            int ai = ops[i][0];
+            int bi = ops[i][1];
+            count = 0;
+            for(int x = 0; x < ai; x++) {
+                for(int y = 0; y < bi; y++) {
+                    M[x][y]++;
+                    if(M[x][y] == i+1) count++;
+                }
+            }
+        }
+        System.out.println("After operation..........");
+        print_2d_array(M);
+        return count;
+    }
+
+    public static void print_2d_array(int[][] matrix) {
+        int len = matrix.length;
+        for(int i = 0; i < len; i++) {
+            for(int j = 0; j < matrix[0].length; j++) {
+                System.out.print(matrix[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+}
+
+
+// Question - 08
+public class Main {
+    public static void main(String[] args) {
+        int[] nums = {2,5,1,3,4,7};
+        System.out.println("Before..........");
+        for (int i : nums) {
+            System.out.print(i + " ");
+        }
+        nums = array_element(nums);
+        System.out.println("\nAfter..........");
+        for (int i : nums) {
+            System.out.print(i + " ");
+        }
+    }
+
+    public static int[] array_element(int[] nums) {
+        int len = nums.length;
+        int[] arr = new int[len];
+        int idx = 0;
+        for(int i = 0; i < len/2; i++) {
+            arr[idx] = nums[i];
+            idx++;
+            arr[idx] = nums[len/2+i];
+            idx++;
+        }
+        return arr;
+    }
+}
