@@ -1,0 +1,299 @@
+# DSA
+# Java Programming
+# Assignment 05
+
+
+// Question - 01
+public class Main{
+    public static void main(String[] args) {
+        int[] original = {1,2,3,4};
+        int m = 2;
+        int n = 2;
+        System.out.println("Before.....");
+        for (int i : original) {
+            System.out.print(i + " ");
+        }
+        int[][] arr = convert_array_into_2d(m, n, original);
+        System.out.println("\nAfter.............");
+        for (int[] is : arr) {
+            for (int is2 : is) {
+                System.out.print(is2 + " ");
+            }
+            System.out.println();
+        }
+    }
+
+    static int[][] convert_array_into_2d(int m, int n, int[] original) {
+        int[][] arr = new int[m][n];
+        int k = 0;
+        for(int i = 0; i < m; i++) {
+            for(int j = 0; j < n; j++) {
+                arr[i][j] = original[k];
+                k++;
+            }
+        }
+        return arr;
+    } 
+}
+
+
+
+
+// Question - 02
+public class Main{
+    public static void main(String[] args) {
+        int n = 5;
+        System.out.println(complete_rows(n));
+    }
+
+    public static int complete_rows(int n) {
+        int count = 0;
+        for(int i = 1; n >= i; i++) {
+            count++;
+            n -= i;
+        }
+        return count;
+    }
+}
+
+
+
+
+// Question - 03
+public class Main{
+    public static void main(String[] args) {
+        int[] nums = {-4,-1,0,3,10};
+        nums = squares_of_number(nums);
+        for (int i : nums) {
+            System.out.print(i + " ");
+        }
+    } 
+
+    public static int[] squares_of_number(int[] nums) {
+        for(int i = 0; i < nums.length; i++) {
+            nums[i] *= nums[i];
+        }
+        for(int i = 0; i < nums.length; i++) {
+            for(int j = i; j < nums.length; j++) {
+                if(nums[i] > nums[j]) {
+                    int temp = nums[i];
+                    nums[i] = nums[j];
+                    nums[j] = temp;
+                }
+            }
+        }
+        return nums;
+    }
+}
+
+
+
+
+// Question - 04
+public class Main {
+    public static void main(String[] args) {
+        int[] nums1 = {1, 2, 3};
+        int[] nums2 = {2, 4, 6};
+        int[][] arr = uncommon_element(nums1, nums2, nums1, nums2);
+        for(int[] num : arr) {
+           for(int ele : num) {
+            System.out.print(ele + " ");
+           }
+           System.out.println();
+        }
+    }
+
+    static int[][] uncommon_element(int[] nums1, int[] nums2, int[] copy_of_nums1,
+    int[] copy_of_nums2){
+        int ptr1 = 0, ptr2 = 0, count = 0;
+        while(ptr1 < nums1.length) {
+            if(nums1[ptr1] == nums2[ptr2]) {
+                count++;
+                copy_of_nums1[ptr1] = Integer.MAX_VALUE;
+                copy_of_nums2[ptr2] = Integer.MAX_VALUE;
+                if(ptr1 == nums1.length-1 || ptr2 == nums2.length-1) break;
+                else {
+                    ptr1++;
+                    ptr2++;
+                }
+            }
+            if(nums1[ptr1] < nums2[ptr2]) {
+                if(ptr1 == nums1.length-1) {
+                    break;
+                } else ptr1++;
+            }
+            if(nums1[ptr1] > nums2[ptr2]) {
+                if(ptr2 == nums2.length-1) {
+                    break;
+                } else ptr2++;
+            }
+        }
+
+        int[] arr1 = new int[nums1.length-count];
+        int[] arr2 = new int[nums2.length-count];
+        int index1 = 0;
+        for(int i = 0; i < copy_of_nums1.length; i++) {
+            if(copy_of_nums1[i] != Integer.MAX_VALUE) {
+                arr1[index1] = copy_of_nums1[i];
+                index1++;
+            } else continue;
+        }
+        index1 = 0;
+        for(int i = 0; i < copy_of_nums2.length; i++) {
+            if(copy_of_nums2[i] != Integer.MAX_VALUE) {
+                arr2[index1] = copy_of_nums2[i];
+                index1++;
+            } else continue;
+        }
+        return new int[][] {arr1, arr2};
+    } 
+}
+
+
+
+
+// Question - 05
+public class Main {
+    public static void main(String[] args) {
+        int[] arr1 = {4,5,8};
+        int[] arr2 = {10,9,1,8};
+        int d = 2;
+        System.out.println(distance_value(arr1, arr2, d));
+    }
+
+    static int distance_value(int[] arr1, int[] arr2, int d) {
+        int count = 0, flag = 0;
+        int arr1_len = arr1.length;
+        int arr2_len = arr2.length;
+        for(int i = 0; i < arr1_len; i++) {
+            int value1 = arr1[i];
+            flag = 0;
+            for(int j = 0; j < arr2_len; j++) {
+                int num = 0;
+                int value2 = arr2[j];
+                if(value1 > value2) num = value1 - value2;
+                else num = value2 - value1;
+                if(num <= d) flag = 1;
+            }
+            if(flag == 0) count++;
+        }
+        return count;
+    }
+}
+
+
+
+
+// Question - 06
+import java.util.ArrayList;
+import java.util.List;
+
+public class FindDuplicates {
+    public static List<Integer> findDuplicates(int[] nums) {
+        List<Integer> result = new ArrayList<>();
+        for (int num : nums) {
+            int index = Math.abs(num) - 1;
+            if (nums[index] > 0) {
+                nums[index] *= -1;
+            } else {
+                result.add(Math.abs(num));
+            }
+        }
+        return result;
+    }
+
+    public static void main(String[] args) {
+        int[] nums = {4, 3, 2, 7, 8, 2, 3, 1};
+        List<Integer> duplicates = findDuplicates(nums);
+        System.out.println(duplicates);
+    }
+}
+
+
+
+
+// Question - 07
+public class Main {
+    public static int findMin(int[] nums) {
+        int left = 0;
+        int right = nums.length - 1;
+
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+
+            // If the mid element is greater than the rightmost element,
+            // the minimum element lies to the right of the mid.
+            if (nums[mid] > nums[right]) {
+                left = mid + 1;
+            }
+            // If the mid element is less than the rightmost element,
+            // the minimum element lies to the left of the mid or is the mid itself.
+            else if (nums[mid] < nums[right]) {
+                right = mid;
+            }
+        }
+
+        // The left pointer will eventually point to the minimum element.
+        return nums[left];
+    }
+
+    public static void main(String[] args) {
+        int[] nums = {4,5,6,7,0,1,2};
+        int minimum = findMin(nums);
+        System.out.println("Minimum element: " + minimum);
+    }
+}
+
+
+
+
+// Question - 08
+import java.util.*;
+
+public class DoubledArray {
+    public static int[] findOriginalArray(int[] changed) {
+        if (changed.length % 2 != 0) {
+            return new int[0]; // If the length is odd, it cannot be a doubled array
+        }
+
+        Map<Integer, Integer> countMap = new HashMap<>();
+        for (int num : changed) {
+            countMap.put(num, countMap.getOrDefault(num, 0) + 1);
+        }
+
+        List<Integer> originalList = new ArrayList<>();
+        Arrays.sort(changed);
+
+        for (int num : changed) {
+            if (countMap.getOrDefault(num, 0) == 0) {
+                continue; // Skip if the number is already used
+            }
+
+            int doubleNum = num * 2;
+
+            if (countMap.getOrDefault(doubleNum, 0) == 0) {
+                return new int[0]; // If the double of the number is not found, it's not a doubled array
+            }
+
+            originalList.add(num);
+            countMap.put(num, countMap.get(num) - 1);
+            countMap.put(doubleNum, countMap.get(doubleNum) - 1);
+        }
+
+        int[] original = new int[originalList.size()];
+        for (int i = 0; i < originalList.size(); i++) {
+            original[i] = originalList.get(i);
+        }
+
+        return original;
+    }
+
+    public static void main(String[] args) {
+        int[] changed = {1, 3, 4, 2, 6, 8};
+        int[] original = findOriginalArray(changed);
+
+        System.out.println(Arrays.toString(original));
+    }
+}
+
+
