@@ -1,0 +1,297 @@
+# DSA
+# Java
+# Assignment 6 - On string and array
+
+
+// Question - 01
+import java.util.*;
+
+public class Main {
+    public static int[] findPermutation(String s) {
+        int n = s.length();
+        int[] arr = new int[n + 1];
+        int small = 0;
+        int large = n;
+
+        for (int i = 0; i < n; i++) {
+            if (s.charAt(i) == 'I') {
+                arr[i] = small++;
+            } else {
+                arr[i] = large--;
+            }
+        }
+
+        arr[n] = small;
+
+        return arr;
+    }
+
+    public static void main(String[] args) {
+        String s = "IIII";
+        int[] arr = findPermutation(s);
+
+        System.out.println(Arrays.toString(arr));
+    }
+}
+
+
+
+
+// Question - 02
+public class Main {
+    public static void main(String[] args) {
+        int[][] matrix = {{1,3,5,7}, {10,11,16,20}, {23,30,34,60}};
+        int target = 34;
+        System.out.println(isTargetPresent(matrix, target));
+    }
+
+    public static boolean isTargetPresent(int[][] matrix, int target) {
+        int n = matrix[0].length;
+        int start = 0;
+        int end = matrix.length-1;
+        boolean flag = false;
+        while(start <= end) {
+            int mid = start + (end-start)/2;
+            if(matrix[mid][0] <= target && matrix[mid][n-1] >= target) {
+                int s = 0;
+                int e = n-1;
+                while(s <= e) {
+                    int m = s + (e-s)/2;
+                    if(matrix[mid][m] == target) {
+                        flag = true;
+                        break;
+                    }
+                    if(matrix[mid][m] >= target) {
+                        e = m-1;
+                    }
+                    else {
+                        s = m+1;
+                    }
+                }
+            }
+
+            if(matrix[mid][0] >= target) {
+                end = mid-1;
+            }
+            else {
+                start = mid+1;
+            }
+        }
+        return flag;
+    }
+}
+
+
+
+
+public class Main {
+    public static void main(String[] args) {
+        int[] arr = {0, 2, 3, 4, 5, 2, 1, 0};
+        System.out.println(isValidMountainArray(arr));
+    }
+
+    public static boolean isValidMountainArray(int[] arr) {
+        int len = arr.length;
+        if(len < 3) {
+            return false;
+        }
+        int i = 0;
+        boolean flag1 = false;
+        boolean flag2 = false;
+        while(arr[i] < arr[i+1] && i <= len-2) {
+            i++;
+            flag1 = true;
+            if(i == len-1) break;
+        }
+        while(i <= len-2 && arr[i] > arr[i+1]) {
+            i++;
+            flag2 = true;
+            if(i == len-1) break;
+        }
+        return (i == len-1 && flag1 && flag2);
+    }
+}
+
+
+
+
+// Question - 04
+public class Main {
+    public static void main(String[] args) {
+        int[] nums = {0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1};
+        System.out.println(contiguousSubarray(nums));
+    }
+
+    public static int contiguousSubarray(int[] arr) {
+        int arrayLen = arr.length;
+        int onesCount = 0;
+        int zerosCount = 0;
+        for (int i : arr) {
+            if(i == 0) zerosCount++;
+            else onesCount++;
+        }
+        if(zerosCount == onesCount) return zerosCount+onesCount;
+        for(int i = arrayLen-1; i >= 0; i--) {
+            if(arr[i] == 0) zerosCount--;
+            else onesCount--;
+            if(zerosCount == onesCount) return zerosCount+onesCount;
+        }
+        return 0;
+    }
+}
+
+
+
+
+// Question - 05
+import java.util.Arrays;
+public class Main {
+    public static int minProductSum(int[] nums1, int[] nums2) {
+        Arrays.sort(nums1);
+        Arrays.sort(nums2);
+
+        int n = nums1.length;
+        int minProductSum = 0;
+
+        for (int i = 0; i < n; i++) {
+            minProductSum += nums1[i] * nums2[n - 1 - i];
+        }
+
+        return minProductSum;
+    }
+
+    public static void main(String[] args) {
+        int[] nums1 = {5, 3, 4, 2};
+        int[] nums2 = {4, 2, 2, 5};
+
+        int minProductSum = minProductSum(nums1, nums2);
+        System.out.println(minProductSum);
+    }
+}
+
+
+
+
+// Question - 06
+import java.util.*;
+public class Main {
+    public static int[] findOriginalArray(int[] changed) {
+        if (changed.length % 2 != 0) {
+            return new int[0]; // If the length is odd, it cannot be a doubled array
+        }
+
+        Map<Integer, Integer> countMap = new HashMap<>();
+        for (int num : changed) {
+            countMap.put(num, countMap.getOrDefault(num, 0) + 1);
+        }
+
+        List<Integer> originalList = new ArrayList<>();
+        Arrays.sort(changed);
+
+        for (int num : changed) {
+            if (countMap.getOrDefault(num, 0) == 0) {
+                continue; // Skip if the number is already used
+            }
+
+            int doubleNum = num * 2;
+
+            if (countMap.getOrDefault(doubleNum, 0) == 0) {
+                return new int[0]; // If the double of the number is not found, it's not a doubled array
+            }
+
+            originalList.add(num);
+            countMap.put(num, countMap.get(num) - 1);
+            countMap.put(doubleNum, countMap.get(doubleNum) - 1);
+        }
+
+        int[] original = new int[originalList.size()];
+        for (int i = 0; i < originalList.size(); i++) {
+            original[i] = originalList.get(i);
+        }
+
+        return original;
+    }
+
+    public static void main(String[] args) {
+        int[] changed = {1, 3, 4, 2, 6, 8};
+        int[] original = findOriginalArray(changed);
+
+        System.out.println(Arrays.toString(original));
+    }
+}
+
+
+
+
+// Question - 07
+import java.util.Arrays;
+public class Main {
+    public static void main(String[] args) {
+        int n = 4;
+        int[][] spiralOrder = generateSpiralOrder(n);
+        for (int[] is : spiralOrder) {
+            System.out.println(Arrays.toString(is));
+        }
+    }
+
+    public static int[][] generateSpiralOrder(int n) {
+        int[][] order = new int[n][n];
+        int num = 1;
+
+        for(int i = 0; i <= n/2; i++) {
+            for(int j = i; j <= n-i-1; j++) {
+                order[i][j] = num++;
+            }
+            for(int j = 1+i; j <= n-i-1; j++) {
+                order[j][n-i-1] = num++;
+            }
+            for(int j = n-2-i; j >= i; j--) {
+                order[n-1-i][j] = num++;
+            }
+            for(int j = n-i-2; j > i; j--) {
+                order[j][i] = num++;
+            }
+        }
+        return order;
+    }
+}
+
+
+
+
+// Question - 08
+public class Main {
+    public static int[][] multiply(int[][] mat1, int[][] mat2) {
+        int m = mat1.length;
+        int k = mat1[0].length;
+        int n = mat2[0].length;
+
+        int[][] result = new int[m][n];
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                int sum = 0;
+                for (int x = 0; x < k; x++) {
+                    sum += mat1[i][x] * mat2[x][j];
+                }
+                result[i][j] = sum;
+            }
+        }
+
+        return result;
+    }
+    public static void main(String[] args) {
+        int[][] mat1 = {{1, 0, 0}, {-1, 0, 3}};
+        int[][] mat2 = {{7, 0, 0}, {0, 0, 0}, {0, 0, 1}};
+
+        int[][] result = multiply(mat1, mat2);
+
+        // Print the result matrix
+        for (int[] row : result) {
+            for (int num : row) {
+                System.out.print(num + " ");
+            }
+            System.out.println();
+        }
+    }
+}
